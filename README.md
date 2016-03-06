@@ -1,6 +1,6 @@
 # Ring-Cljsjs
 
-[![Build Status](https://travis-ci.org/deraen/ring-cljsjs.svg)](https://travis-ci.org/deraen/ring-cljsjs)
+[![Clojars Project](https://img.shields.io/clojars/v/ring-cljsjs.svg)](https://clojars.org/ring-cljsjs)
 
 Ring middleware to serve static assets from [cljsjs][].
 
