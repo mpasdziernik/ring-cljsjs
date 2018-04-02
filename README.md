@@ -21,7 +21,7 @@ Require the middleware and add it to your handler.
 ```clj
 (require '[ring.middleware.cljsjs :refer [wrap-cljsjs]])
 
-(def app (wrap-cljsjs handler)
+(def app (wrap-cljsjs handler))
 ```
 
 Cljsjs assets will then be served from the following path:
