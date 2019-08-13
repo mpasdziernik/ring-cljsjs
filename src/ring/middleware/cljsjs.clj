@@ -3,7 +3,8 @@
             [ring.middleware.head :as head]
             [ring.util.codec :as codec]
             [ring.util.request :as req]
-            [ring.util.response :as resp])
+            [ring.util.response :as resp]
+            [ring.util.mime-type :as mime])
   (:import [java.util.jar JarFile]))
 
 (def ^:private cljsjs-pattern
@@ -36,16 +37,22 @@
 (defn- request-path [request]
   (codec/url-decode (req/path-info request)))
 
+(defn- add-mime-type [response path mime-types]
+  (if-let [mime-type (mime/ext-mime-type path mime-types)]
+    (resp/content-type response mime-type)
+    response))
+
 (defn wrap-cljsjs
   ([handler]
    (wrap-cljsjs handler nil))
-  ([handler {:keys [prefix]
-             :or {prefix "/cljsjs"}}]
+  ([handler {:keys [prefix mime-types]
+             :or {prefix "/cljsjs" mime-types {}}}]
    (let [assets (asset-map prefix)]
      (fn [request]
        (if (#{:head :get} (:request-method request))
          (if-let [path (assets (request-path request))]
            (-> (resp/resource-response path)
+               (add-mime-type path mime-types)
                (head/head-response request))
            (handler request))
          (handler request))))))
